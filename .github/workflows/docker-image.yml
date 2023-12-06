@@ -1,27 +1,13 @@
-name: Docker Image CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+name: Publish Docker
+on: [push]
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
-    - name: docker login
-      env:
-        DOCKER_USER: dersonbsb
-        DOCKER_PASSWORD: dckr_pat_qqu7Hru4TiAoW5_1Hi_eOGjl0sY
-      run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: Build the Docker Image
-      run: docker build . --file DockerFile --tag dersonbsb2022/evolution-api:$(date +%s)
-
-    - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/evolution-api
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v5
+      with:
+        name: dersonbsb/evolution-api
+        username: dersonbsb
+        password: dckr_pat_qqu7Hru4TiAoW5_1Hi_eOGjl0sY
